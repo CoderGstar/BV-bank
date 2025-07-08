@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-banking focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -18,6 +18,15 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        
+        // Banking specific variants
+        banking: "bg-gradient-primary text-primary-foreground hover:shadow-glow hover:scale-105 transform transition-all duration-300",
+        "banking-secondary": "bg-gradient-secondary text-secondary-foreground hover:bg-secondary-dark hover:shadow-card-banking",
+        "banking-success": "bg-banking-success text-banking-success-foreground hover:bg-banking-success/90 shadow-banking",
+        "banking-warning": "bg-banking-warning text-banking-warning-foreground hover:bg-banking-warning/90",
+        "banking-danger": "bg-banking-danger text-banking-danger-foreground hover:bg-banking-danger/90",
+        "banking-outline": "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground",
+        "banking-glass": "bg-primary/10 backdrop-blur-sm border border-primary/20 text-primary hover:bg-primary/20",
       },
       size: {
         default: "h-10 px-4 py-2",
