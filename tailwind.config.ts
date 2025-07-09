@@ -79,7 +79,8 @@ export default {
 				'gradient-secondary': 'var(--gradient-secondary)',
 				'gradient-dark': 'var(--gradient-dark)',
 				'gradient-banking': 'var(--gradient-banking)',
-				'gradient-hero': 'var(--gradient-hero)'
+				'gradient-hero': 'var(--gradient-hero)',
+				'gradient-header': 'var(--gradient-header)'
 			},
 			boxShadow: {
 				'banking': 'var(--shadow-banking)',

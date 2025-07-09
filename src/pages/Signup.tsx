@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Eye, EyeOff, Banknote, Shield, ArrowLeft, CheckCircle } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -23,7 +23,15 @@ export default function Signup() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  const { signUp, user } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
 
   const countries = [
     "Nigeria", "United States", "South Africa", "United Kingdom", 
@@ -38,46 +46,29 @@ export default function Signup() {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-      toast({
-        title: "Password Mismatch",
-        description: "Passwords do not match. Please try again.",
-        variant: "destructive",
-      });
       return;
     }
 
     if (!agreeToTerms) {
-      toast({
-        title: "Terms Required",
-        description: "Please agree to the terms and conditions to continue.",
-        variant: "destructive",
-      });
       return;
     }
 
     setIsLoading(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Generate account number
-      const accountNumber = Math.floor(Math.random() * 9000000000) + 1000000000;
-      
-      toast({
-        title: "Account Created Successfully!",
-        description: `Welcome to GV Bank! Your account number is: ${accountNumber}`,
+      const { error } = await signUp(formData.email, formData.password, {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        phone: formData.phone,
+        country: formData.country,
       });
       
-      // In a real app, this would handle user registration
-      setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 2000);
-    } catch (error) {
-      toast({
-        title: "Registration Failed",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
+      if (!error) {
+        // Redirect after successful signup
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 2000);
+      }
     } finally {
       setIsLoading(false);
     }
