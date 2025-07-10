@@ -68,6 +68,72 @@ export type Database = {
         }
         Relationships: []
       }
+      bank_details: {
+        Row: {
+          account_name: string
+          account_number: string
+          bank_name: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          routing_number: string | null
+          swift_code: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_name: string
+          account_number: string
+          bank_name: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          routing_number?: string | null
+          swift_code?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_name?: string
+          account_number?: string
+          bank_name?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          routing_number?: string | null
+          swift_code?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      crypto_wallets: {
+        Row: {
+          created_at: string
+          crypto_type: Database["public"]["Enums"]["crypto_type"]
+          id: string
+          is_active: boolean | null
+          updated_at: string
+          wallet_address: string
+          wallet_name: string
+        }
+        Insert: {
+          created_at?: string
+          crypto_type: Database["public"]["Enums"]["crypto_type"]
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+          wallet_address: string
+          wallet_name: string
+        }
+        Update: {
+          created_at?: string
+          crypto_type?: Database["public"]["Enums"]["crypto_type"]
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+          wallet_address?: string
+          wallet_name?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string
@@ -151,51 +217,111 @@ export type Database = {
       transactions: {
         Row: {
           amount: number
+          bank_details_id: string | null
           bank_name: string | null
           created_at: string
+          crypto_type: Database["public"]["Enums"]["crypto_type"] | null
+          crypto_wallet_id: string | null
           currency: Database["public"]["Enums"]["currency_type"]
           description: string | null
           id: string
+          notification_sent: boolean | null
           phone_number: string | null
           recipient_account: string | null
           recipient_name: string | null
+          recipient_user_id: string | null
           reference_id: string | null
           status: Database["public"]["Enums"]["transaction_status"]
           transaction_type: Database["public"]["Enums"]["transaction_type"]
+          transfer_type: Database["public"]["Enums"]["transfer_type"] | null
           updated_at: string
           user_id: string
         }
         Insert: {
           amount: number
+          bank_details_id?: string | null
           bank_name?: string | null
           created_at?: string
+          crypto_type?: Database["public"]["Enums"]["crypto_type"] | null
+          crypto_wallet_id?: string | null
           currency?: Database["public"]["Enums"]["currency_type"]
           description?: string | null
           id?: string
+          notification_sent?: boolean | null
           phone_number?: string | null
           recipient_account?: string | null
           recipient_name?: string | null
+          recipient_user_id?: string | null
           reference_id?: string | null
           status?: Database["public"]["Enums"]["transaction_status"]
           transaction_type: Database["public"]["Enums"]["transaction_type"]
+          transfer_type?: Database["public"]["Enums"]["transfer_type"] | null
           updated_at?: string
           user_id: string
         }
         Update: {
           amount?: number
+          bank_details_id?: string | null
           bank_name?: string | null
           created_at?: string
+          crypto_type?: Database["public"]["Enums"]["crypto_type"] | null
+          crypto_wallet_id?: string | null
           currency?: Database["public"]["Enums"]["currency_type"]
           description?: string | null
           id?: string
+          notification_sent?: boolean | null
           phone_number?: string | null
           recipient_account?: string | null
           recipient_name?: string | null
+          recipient_user_id?: string | null
           reference_id?: string | null
           status?: Database["public"]["Enums"]["transaction_status"]
           transaction_type?: Database["public"]["Enums"]["transaction_type"]
+          transfer_type?: Database["public"]["Enums"]["transfer_type"] | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      withdrawal_requests: {
+        Row: {
+          admin_notes: string | null
+          amount: number
+          bank_details_id: string | null
+          created_at: string
+          crypto_wallet_id: string | null
+          currency: Database["public"]["Enums"]["currency_type"]
+          id: string
+          status: Database["public"]["Enums"]["transaction_status"] | null
+          updated_at: string
+          user_id: string
+          withdrawal_method: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          amount: number
+          bank_details_id?: string | null
+          created_at?: string
+          crypto_wallet_id?: string | null
+          currency: Database["public"]["Enums"]["currency_type"]
+          id?: string
+          status?: Database["public"]["Enums"]["transaction_status"] | null
+          updated_at?: string
+          user_id: string
+          withdrawal_method: string
+        }
+        Update: {
+          admin_notes?: string | null
+          amount?: number
+          bank_details_id?: string | null
+          created_at?: string
+          crypto_wallet_id?: string | null
+          currency?: Database["public"]["Enums"]["currency_type"]
+          id?: string
+          status?: Database["public"]["Enums"]["transaction_status"] | null
+          updated_at?: string
+          user_id?: string
+          withdrawal_method?: string
         }
         Relationships: []
       }
@@ -204,9 +330,29 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_notification: {
+        Args: {
+          p_user_id: string
+          p_message: string
+          p_type: Database["public"]["Enums"]["notification_type"]
+          p_recipient: string
+          p_transaction_id?: string
+        }
+        Returns: string
+      }
       generate_account_number: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      process_internal_transfer: {
+        Args: {
+          p_from_user_id: string
+          p_to_user_id: string
+          p_amount: number
+          p_currency: Database["public"]["Enums"]["currency_type"]
+          p_description?: string
+        }
+        Returns: boolean
       }
       update_account_balance: {
         Args: {
@@ -219,6 +365,7 @@ export type Database = {
       }
     }
     Enums: {
+      crypto_type: "BTC" | "ETH" | "USDT" | "BNB" | "ADA" | "DOT"
       currency_type: "USD" | "NGN" | "ZAR" | "BTC" | "ETH" | "USDT"
       notification_type: "sms" | "email"
       transaction_status: "pending" | "completed" | "failed" | "cancelled"
@@ -229,6 +376,7 @@ export type Database = {
         | "transfer_out"
         | "airtime"
         | "data"
+      transfer_type: "internal" | "external" | "crypto"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -356,6 +504,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      crypto_type: ["BTC", "ETH", "USDT", "BNB", "ADA", "DOT"],
       currency_type: ["USD", "NGN", "ZAR", "BTC", "ETH", "USDT"],
       notification_type: ["sms", "email"],
       transaction_status: ["pending", "completed", "failed", "cancelled"],
@@ -367,6 +516,7 @@ export const Constants = {
         "airtime",
         "data",
       ],
+      transfer_type: ["internal", "external", "crypto"],
     },
   },
 } as const
