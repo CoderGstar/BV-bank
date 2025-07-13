@@ -12,6 +12,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error?: any }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
+  resendVerification: (email: string) => Promise<{ error?: any }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -120,7 +121,16 @@ export const useAuthProvider = () => {
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        // Better error messages for common issues
+        if (error.message.includes('Invalid login credentials')) {
+          throw new Error('Invalid email or password. If you just signed up, please check your email and click the verification link first.');
+        }
+        if (error.message.includes('Email not confirmed')) {
+          throw new Error('Please check your email and click the verification link before signing in.');
+        }
+        throw error;
+      }
 
       toast({
         title: "Welcome back!",
@@ -156,6 +166,34 @@ export const useAuthProvider = () => {
     }
   };
 
+  const resendVerification = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Verification Email Sent",
+        description: "Please check your email for the verification link.",
+      });
+
+      return { error: null };
+    } catch (error: any) {
+      toast({
+        title: "Failed to Send Email",
+        description: error.message,
+        variant: "destructive",
+      });
+      return { error };
+    }
+  };
+
   return {
     user,
     session,
@@ -165,6 +203,7 @@ export const useAuthProvider = () => {
     signIn,
     signOut,
     refreshProfile,
+    resendVerification,
   };
 };
 

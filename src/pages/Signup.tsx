@@ -98,7 +98,8 @@ export default function Signup() {
             <div>
               <CardTitle className="text-2xl font-bold">Join GV Bank</CardTitle>
               <CardDescription>
-                Create your account and start banking smarter
+                Create your account and start banking smarter.<br/>
+                <span className="text-primary font-medium">You'll need to verify your email before signing in.</span>
               </CardDescription>
             </div>
           </CardHeader>

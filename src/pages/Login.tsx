@@ -14,7 +14,8 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { signIn, user } = useAuth();
+  const [showResendVerification, setShowResendVerification] = useState(false);
+  const { signIn, resendVerification, user } = useAuth();
   const navigate = useNavigate();
 
   // Redirect if already authenticated
@@ -27,16 +28,33 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setShowResendVerification(false);
 
     try {
       const { error } = await signIn(email, password);
       
-      if (!error) {
+      if (error && error.message.includes('verification')) {
+        setShowResendVerification(true);
+      } else if (!error) {
         // Redirect to dashboard
         setTimeout(() => {
           navigate('/dashboard');
         }, 1000);
       }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    if (!email) {
+      alert('Please enter your email address first');
+      return;
+    }
+    
+    setIsLoading(true);
+    try {
+      await resendVerification(email);
     } finally {
       setIsLoading(false);
     }
@@ -142,6 +160,24 @@ export default function Login() {
                 {isLoading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
+
+            {/* Email Verification Resend */}
+            {showResendVerification && (
+              <div className="bg-banking-warning/10 border border-banking-warning/20 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground mb-3">
+                  Can't sign in? You may need to verify your email first.
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleResendVerification}
+                  disabled={isLoading}
+                  className="w-full"
+                >
+                  Resend Verification Email
+                </Button>
+              </div>
+            )}
 
             <div className="text-center">
               <p className="text-sm text-muted-foreground">
