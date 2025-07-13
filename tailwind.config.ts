@@ -36,12 +36,12 @@ export default {
 					dark: 'hsl(var(--secondary-dark))'
 				},
 				banking: {
-					success: 'hsl(var(--success))',
-					'success-foreground': 'hsl(var(--success-foreground))',
-					warning: 'hsl(var(--warning))',
-					'warning-foreground': 'hsl(var(--warning-foreground))',
-					danger: 'hsl(var(--danger))',
-					'danger-foreground': 'hsl(var(--danger-foreground))'
+					success: 'hsl(var(--banking-success))',
+					'success-foreground': 'hsl(var(--banking-success-foreground))',
+					warning: 'hsl(var(--banking-warning))',
+					'warning-foreground': 'hsl(var(--banking-warning-foreground))',
+					danger: 'hsl(var(--banking-danger))',
+					'danger-foreground': 'hsl(var(--banking-danger-foreground))'
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',

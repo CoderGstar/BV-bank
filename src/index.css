@@ -30,12 +30,12 @@
     --secondary-dark: 215 20% 65%;
 
     /* Banking Colors */
-    --success: 145 65% 45%;
-    --success-foreground: 220 25% 97%;
-    --warning: 35 85% 55%;
-    --warning-foreground: 215 25% 15%;
-    --danger: 0 75% 55%;
-    --danger-foreground: 220 25% 97%;
+    --banking-success: 145 65% 45%;
+    --banking-success-foreground: 220 25% 97%;
+    --banking-warning: 35 85% 55%;
+    --banking-warning-foreground: 215 25% 15%;
+    --banking-danger: 0 75% 55%;
+    --banking-danger-foreground: 220 25% 97%;
 
     /* Muted Colors */
     --muted: 215 15% 92%;
@@ -109,12 +109,12 @@
     --secondary-foreground: 220 25% 95%;
     --secondary-dark: 215 25% 15%;
 
-    --success: 145 60% 50%;
-    --success-foreground: 215 30% 8%;
-    --warning: 35 80% 60%;
-    --warning-foreground: 215 30% 8%;
-    --danger: 0 70% 60%;
-    --danger-foreground: 215 30% 8%;
+    --banking-success: 145 60% 50%;
+    --banking-success-foreground: 215 30% 8%;
+    --banking-warning: 35 80% 60%;
+    --banking-warning-foreground: 215 30% 8%;
+    --banking-danger: 0 70% 60%;
+    --banking-danger-foreground: 215 30% 8%;
 
     --muted: 215 20% 20%;
     --muted-foreground: 215 15% 65%;

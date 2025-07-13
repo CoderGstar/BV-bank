@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { TransferModal } from "@/components/banking/TransferModal";
+import { WithdrawModal } from "@/components/banking/WithdrawModal";
+import { DepositModal } from "@/components/banking/DepositModal";
 import { 
   CreditCard, 
   DollarSign, 
@@ -28,6 +31,12 @@ export default function Dashboard() {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Modal states
+  const [transferModalOpen, setTransferModalOpen] = useState(false);
+  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
+  const [depositModalOpen, setDepositModalOpen] = useState(false);
+  
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -189,15 +198,27 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Button variant="banking" className="h-20 flex-col">
+              <Button 
+                variant="banking" 
+                className="h-20 flex-col"
+                onClick={() => setTransferModalOpen(true)}
+              >
                 <Send className="h-6 w-6 mb-2" />
                 Transfer
               </Button>
-              <Button variant="banking-outline" className="h-20 flex-col">
+              <Button 
+                variant="banking-outline" 
+                className="h-20 flex-col"
+                onClick={() => setDepositModalOpen(true)}
+              >
                 <PlusCircle className="h-6 w-6 mb-2" />
                 Deposit
               </Button>
-              <Button variant="banking-outline" className="h-20 flex-col">
+              <Button 
+                variant="banking-outline" 
+                className="h-20 flex-col"
+                onClick={() => setWithdrawModalOpen(true)}
+              >
                 <ArrowUpRight className="h-6 w-6 mb-2" />
                 Withdraw
               </Button>
@@ -266,6 +287,27 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Banking Modals */}
+      <TransferModal
+        isOpen={transferModalOpen}
+        onClose={() => setTransferModalOpen(false)}
+        accounts={accounts}
+        onTransferComplete={fetchUserData}
+      />
+      
+      <WithdrawModal
+        isOpen={withdrawModalOpen}
+        onClose={() => setWithdrawModalOpen(false)}
+        accounts={accounts}
+        onWithdrawComplete={fetchUserData}
+      />
+      
+      <DepositModal
+        isOpen={depositModalOpen}
+        onClose={() => setDepositModalOpen(false)}
+        onDepositComplete={fetchUserData}
+      />
     </div>
   );
 }
